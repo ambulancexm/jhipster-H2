@@ -19,17 +19,32 @@ entity MxCell {
 }
 
 entity Task{
-	id Long,
-    name String
+	id Long   
 }
 
-entity Event{}
+entity Event{
+	id Long
+}
 
-entity Gateway{}
+entity Gateway{
+	id Long
+}
+
+entity Message{
+	id Long
+}
+
+entity Process{
+	id Long
+}
 
 
 relationship OneToMany {
-   Task to MxCell,
+   MxCell to Task
+   MxCell to Event
+   MxCell to Gateway
+   MxCell to Message
+   MxCell to Process
    
   
 }

@@ -35,7 +35,6 @@
           <th scope="col"><span jhiTranslate="myApp.mxCell.id">Id</span></th>
           <th scope="col"><span jhiTranslate="myApp.mxCell.lg">Lg</span></th>
           <th scope="col"><span jhiTranslate="myApp.mxCell.style">Style</span></th>
-          <th scope="col"><span jhiTranslate="myApp.mxCell.task">Task</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -46,11 +45,6 @@
           </td>
           <td>{{ mxCell.lg }}</td>
           <td>{{ mxCell.style }}</td>
-          <td>
-            <div *ngIf="mxCell.task">
-              <a [routerLink]="['/task', mxCell.task?.id, 'view']">{{ mxCell.task?.id }}</a>
-            </div>
-          </td>
           <td class="text-right">
             <div class="btn-group">
               <button

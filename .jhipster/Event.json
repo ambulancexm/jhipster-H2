@@ -1,7 +1,19 @@
 {
   "name": "Event",
-  "fields": [],
-  "relationships": [],
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "mxCell",
+      "otherEntityRelationshipName": "event",
+      "relationshipName": "mxCell"
+    }
+  ],
   "entityTableName": "event",
   "dto": "no",
   "pagination": "no",

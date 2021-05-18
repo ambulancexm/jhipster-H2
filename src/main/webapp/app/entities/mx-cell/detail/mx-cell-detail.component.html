@@ -22,12 +22,6 @@
         <dd>
           <span>{{ mxCell.style }}</span>
         </dd>
-        <dt><span jhiTranslate="myApp.mxCell.task">Task</span></dt>
-        <dd>
-          <div *ngIf="mxCell.task">
-            <a [routerLink]="['/task', mxCell.task?.id, 'view']">{{ mxCell.task?.id }}</a>
-          </div>
-        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

@@ -1,5 +1,6 @@
 package com.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
@@ -19,6 +20,10 @@ public class Event implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "tasks", "events", "gateways", "messages", "processes" }, allowSetters = true)
+    private MxCell mxCell;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -31,6 +36,19 @@ public class Event implements Serializable {
     public Event id(Long id) {
         this.id = id;
         return this;
+    }
+
+    public MxCell getMxCell() {
+        return this.mxCell;
+    }
+
+    public Event mxCell(MxCell mxCell) {
+        this.setMxCell(mxCell);
+        return this;
+    }
+
+    public void setMxCell(MxCell mxCell) {
+        this.mxCell = mxCell;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

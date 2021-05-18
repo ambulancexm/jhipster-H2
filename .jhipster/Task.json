@@ -4,15 +4,11 @@
     {
       "fieldName": "id",
       "fieldType": "Long"
-    },
-    {
-      "fieldName": "name",
-      "fieldType": "String"
     }
   ],
   "relationships": [
     {
-      "relationshipType": "one-to-many",
+      "relationshipType": "many-to-one",
       "otherEntityName": "mxCell",
       "otherEntityRelationshipName": "task",
       "relationshipName": "mxCell"

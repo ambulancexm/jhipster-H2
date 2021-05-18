@@ -2,8 +2,6 @@ package com.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -22,13 +20,9 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
-
-    @OneToMany(mappedBy = "task")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "task" }, allowSetters = true)
-    private Set<MxCell> mxCells = new HashSet<>();
+    @ManyToOne
+    @JsonIgnoreProperties(value = { "tasks", "events", "gateways", "messages", "processes" }, allowSetters = true)
+    private MxCell mxCell;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -44,48 +38,17 @@ public class Task implements Serializable {
         return this;
     }
 
-    public String getName() {
-        return this.name;
+    public MxCell getMxCell() {
+        return this.mxCell;
     }
 
-    public Task name(String name) {
-        this.name = name;
+    public Task mxCell(MxCell mxCell) {
+        this.setMxCell(mxCell);
         return this;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Set<MxCell> getMxCells() {
-        return this.mxCells;
-    }
-
-    public Task mxCells(Set<MxCell> mxCells) {
-        this.setMxCells(mxCells);
-        return this;
-    }
-
-    public Task addMxCell(MxCell mxCell) {
-        this.mxCells.add(mxCell);
-        mxCell.setTask(this);
-        return this;
-    }
-
-    public Task removeMxCell(MxCell mxCell) {
-        this.mxCells.remove(mxCell);
-        mxCell.setTask(null);
-        return this;
-    }
-
-    public void setMxCells(Set<MxCell> mxCells) {
-        if (this.mxCells != null) {
-            this.mxCells.forEach(i -> i.setTask(null));
-        }
-        if (mxCells != null) {
-            mxCells.forEach(i -> i.setTask(this));
-        }
-        this.mxCells = mxCells;
+    public void setMxCell(MxCell mxCell) {
+        this.mxCell = mxCell;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -112,7 +75,6 @@ public class Task implements Serializable {
     public String toString() {
         return "Task{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
             "}";
     }
 }
