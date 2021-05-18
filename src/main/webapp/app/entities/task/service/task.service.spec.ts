@@ -22,7 +22,6 @@ describe('Service Tests', () => {
 
       elemDefault = {
         id: 0,
-        name: 'AAAAAAA',
       };
     });
 
@@ -58,7 +57,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            name: 'BBBBBB',
           },
           elemDefault
         );
@@ -73,12 +71,7 @@ describe('Service Tests', () => {
       });
 
       it('should partial update a Task', () => {
-        const patchObject = Object.assign(
-          {
-            name: 'BBBBBB',
-          },
-          new Task()
-        );
+        const patchObject = Object.assign({}, new Task());
 
         const returnedFromService = Object.assign(patchObject, elemDefault);
 
@@ -95,7 +88,6 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             id: 1,
-            name: 'BBBBBB',
           },
           elemDefault
         );
@@ -147,7 +139,7 @@ describe('Service Tests', () => {
         });
 
         it('should add only unique Task to an array', () => {
-          const taskArray: ITask[] = [{ id: 123 }, { id: 456 }, { id: 64828 }];
+          const taskArray: ITask[] = [{ id: 123 }, { id: 456 }, { id: 77763 }];
           const taskCollection: ITask[] = [{ id: 123 }];
           expectedResult = service.addTaskToCollectionIfMissing(taskCollection, ...taskArray);
           expect(expectedResult).toHaveLength(3);

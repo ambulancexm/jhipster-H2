@@ -14,9 +14,11 @@
         <dd>
           <span>{{ task.id }}</span>
         </dd>
-        <dt><span jhiTranslate="myApp.task.name">Name</span></dt>
+        <dt><span jhiTranslate="myApp.task.mxCell">Mx Cell</span></dt>
         <dd>
-          <span>{{ task.name }}</span>
+          <div *ngIf="task.mxCell">
+            <a [routerLink]="['/mx-cell', task.mxCell?.id, 'view']">{{ task.mxCell?.id }}</a>
+          </div>
         </dd>
       </dl>
 

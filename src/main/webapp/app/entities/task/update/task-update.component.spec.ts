@@ -9,6 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { TaskService } from '../service/task.service';
 import { ITask, Task } from '../task.model';
+import { IMxCell } from 'app/entities/mx-cell/mx-cell.model';
+import { MxCellService } from 'app/entities/mx-cell/service/mx-cell.service';
 
 import { TaskUpdateComponent } from './task-update.component';
 
@@ -18,6 +20,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<TaskUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let taskService: TaskService;
+    let mxCellService: MxCellService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -31,18 +34,41 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(TaskUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       taskService = TestBed.inject(TaskService);
+      mxCellService = TestBed.inject(MxCellService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
+      it('Should call MxCell query and add missing value', () => {
+        const task: ITask = { id: 456 };
+        const mxCell: IMxCell = { id: 90186 };
+        task.mxCell = mxCell;
+
+        const mxCellCollection: IMxCell[] = [{ id: 16427 }];
+        spyOn(mxCellService, 'query').and.returnValue(of(new HttpResponse({ body: mxCellCollection })));
+        const additionalMxCells = [mxCell];
+        const expectedCollection: IMxCell[] = [...additionalMxCells, ...mxCellCollection];
+        spyOn(mxCellService, 'addMxCellToCollectionIfMissing').and.returnValue(expectedCollection);
+
+        activatedRoute.data = of({ task });
+        comp.ngOnInit();
+
+        expect(mxCellService.query).toHaveBeenCalled();
+        expect(mxCellService.addMxCellToCollectionIfMissing).toHaveBeenCalledWith(mxCellCollection, ...additionalMxCells);
+        expect(comp.mxCellsSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const task: ITask = { id: 456 };
+        const mxCell: IMxCell = { id: 73232 };
+        task.mxCell = mxCell;
 
         activatedRoute.data = of({ task });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(task));
+        expect(comp.mxCellsSharedCollection).toContain(mxCell);
       });
     });
 
@@ -107,6 +133,16 @@ describe('Component Tests', () => {
         expect(taskService.update).toHaveBeenCalledWith(task);
         expect(comp.isSaving).toEqual(false);
         expect(comp.previousState).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Tracking relationships identifiers', () => {
+      describe('trackMxCellById', () => {
+        it('Should return tracked MxCell primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackMxCellById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
       });
     });
   });

@@ -120,10 +120,6 @@ public class TaskResource {
             .findById(task.getId())
             .map(
                 existingTask -> {
-                    if (task.getName() != null) {
-                        existingTask.setName(task.getName());
-                    }
-
                     return existingTask;
                 }
             )

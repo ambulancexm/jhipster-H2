@@ -9,6 +9,8 @@ import { of, Subject } from 'rxjs';
 
 import { GatewayService } from '../service/gateway.service';
 import { IGateway, Gateway } from '../gateway.model';
+import { IMxCell } from 'app/entities/mx-cell/mx-cell.model';
+import { MxCellService } from 'app/entities/mx-cell/service/mx-cell.service';
 
 import { GatewayUpdateComponent } from './gateway-update.component';
 
@@ -18,6 +20,7 @@ describe('Component Tests', () => {
     let fixture: ComponentFixture<GatewayUpdateComponent>;
     let activatedRoute: ActivatedRoute;
     let gatewayService: GatewayService;
+    let mxCellService: MxCellService;
 
     beforeEach(() => {
       TestBed.configureTestingModule({
@@ -31,18 +34,41 @@ describe('Component Tests', () => {
       fixture = TestBed.createComponent(GatewayUpdateComponent);
       activatedRoute = TestBed.inject(ActivatedRoute);
       gatewayService = TestBed.inject(GatewayService);
+      mxCellService = TestBed.inject(MxCellService);
 
       comp = fixture.componentInstance;
     });
 
     describe('ngOnInit', () => {
+      it('Should call MxCell query and add missing value', () => {
+        const gateway: IGateway = { id: 456 };
+        const mxCell: IMxCell = { id: 66039 };
+        gateway.mxCell = mxCell;
+
+        const mxCellCollection: IMxCell[] = [{ id: 1450 }];
+        spyOn(mxCellService, 'query').and.returnValue(of(new HttpResponse({ body: mxCellCollection })));
+        const additionalMxCells = [mxCell];
+        const expectedCollection: IMxCell[] = [...additionalMxCells, ...mxCellCollection];
+        spyOn(mxCellService, 'addMxCellToCollectionIfMissing').and.returnValue(expectedCollection);
+
+        activatedRoute.data = of({ gateway });
+        comp.ngOnInit();
+
+        expect(mxCellService.query).toHaveBeenCalled();
+        expect(mxCellService.addMxCellToCollectionIfMissing).toHaveBeenCalledWith(mxCellCollection, ...additionalMxCells);
+        expect(comp.mxCellsSharedCollection).toEqual(expectedCollection);
+      });
+
       it('Should update editForm', () => {
         const gateway: IGateway = { id: 456 };
+        const mxCell: IMxCell = { id: 8941 };
+        gateway.mxCell = mxCell;
 
         activatedRoute.data = of({ gateway });
         comp.ngOnInit();
 
         expect(comp.editForm.value).toEqual(expect.objectContaining(gateway));
+        expect(comp.mxCellsSharedCollection).toContain(mxCell);
       });
     });
 
@@ -107,6 +133,16 @@ describe('Component Tests', () => {
         expect(gatewayService.update).toHaveBeenCalledWith(gateway);
         expect(comp.isSaving).toEqual(false);
         expect(comp.previousState).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('Tracking relationships identifiers', () => {
+      describe('trackMxCellById', () => {
+        it('Should return tracked MxCell primary key', () => {
+          const entity = { id: 123 };
+          const trackResult = comp.trackMxCellById(0, entity);
+          expect(trackResult).toEqual(entity.id);
+        });
       });
     });
   });

@@ -43,8 +43,8 @@
     "clientTheme": "none",
     "clientThemeVariant": "",
     "reactive": false,
-    "entities": ["MxCell", "Task", "Event", "Gateway"],
-    "lastLiquibaseTimestamp": 1621320832000
+    "entities": ["MxCell", "Task", "Event", "Gateway", "Message", "Process"],
+    "lastLiquibaseTimestamp": 1621328677000
   },
   "git-provider": "GitHub",
   "git-company": "ambulancexm",

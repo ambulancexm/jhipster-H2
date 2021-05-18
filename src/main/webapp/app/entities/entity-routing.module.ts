@@ -24,6 +24,16 @@ import { RouterModule } from '@angular/router';
         data: { pageTitle: 'myApp.gateway.home.title' },
         loadChildren: () => import('./gateway/gateway.module').then(m => m.GatewayModule),
       },
+      {
+        path: 'message',
+        data: { pageTitle: 'myApp.message.home.title' },
+        loadChildren: () => import('./message/message.module').then(m => m.MessageModule),
+      },
+      {
+        path: 'process',
+        data: { pageTitle: 'myApp.process.home.title' },
+        loadChildren: () => import('./process/process.module').then(m => m.ProcessModule),
+      },
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ]),
   ],

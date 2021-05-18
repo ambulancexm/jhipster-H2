@@ -32,7 +32,8 @@
     <table class="table table-striped" aria-describedby="page-heading">
       <thead>
         <tr>
-          <th scope="col"><span jhiTranslate="global.field.id">ID</span></th>
+          <th scope="col"><span jhiTranslate="myApp.gateway.id">Id</span></th>
+          <th scope="col"><span jhiTranslate="myApp.gateway.mxCell">Mx Cell</span></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -40,6 +41,11 @@
         <tr *ngFor="let gateway of gateways; trackBy: trackId" data-cy="entityTable">
           <td>
             <a [routerLink]="['/gateway', gateway.id, 'view']">{{ gateway.id }}</a>
+          </td>
+          <td>
+            <div *ngIf="gateway.mxCell">
+              <a [routerLink]="['/mx-cell', gateway.mxCell?.id, 'view']">{{ gateway.mxCell?.id }}</a>
+            </div>
           </td>
           <td class="text-right">
             <div class="btn-group">

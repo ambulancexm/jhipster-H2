@@ -29,9 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class TaskResourceIT {
 
-    private static final String DEFAULT_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NAME = "BBBBBBBBBB";
-
     private static final String ENTITY_API_URL = "/api/tasks";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -56,7 +53,7 @@ class TaskResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Task createEntity(EntityManager em) {
-        Task task = new Task().name(DEFAULT_NAME);
+        Task task = new Task();
         return task;
     }
 
@@ -67,7 +64,7 @@ class TaskResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Task createUpdatedEntity(EntityManager em) {
-        Task task = new Task().name(UPDATED_NAME);
+        Task task = new Task();
         return task;
     }
 
@@ -89,7 +86,6 @@ class TaskResourceIT {
         List<Task> taskList = taskRepository.findAll();
         assertThat(taskList).hasSize(databaseSizeBeforeCreate + 1);
         Task testTask = taskList.get(taskList.size() - 1);
-        assertThat(testTask.getName()).isEqualTo(DEFAULT_NAME);
     }
 
     @Test
@@ -121,8 +117,7 @@ class TaskResourceIT {
             .perform(get(ENTITY_API_URL + "?sort=id,desc"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(task.getId().intValue())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
+            .andExpect(jsonPath("$.[*].id").value(hasItem(task.getId().intValue())));
     }
 
     @Test
@@ -136,8 +131,7 @@ class TaskResourceIT {
             .perform(get(ENTITY_API_URL_ID, task.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.id").value(task.getId().intValue()))
-            .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
+            .andExpect(jsonPath("$.id").value(task.getId().intValue()));
     }
 
     @Test
@@ -159,7 +153,6 @@ class TaskResourceIT {
         Task updatedTask = taskRepository.findById(task.getId()).get();
         // Disconnect from session so that the updates on updatedTask are not directly saved in db
         em.detach(updatedTask);
-        updatedTask.name(UPDATED_NAME);
 
         restTaskMockMvc
             .perform(
@@ -173,7 +166,6 @@ class TaskResourceIT {
         List<Task> taskList = taskRepository.findAll();
         assertThat(taskList).hasSize(databaseSizeBeforeUpdate);
         Task testTask = taskList.get(taskList.size() - 1);
-        assertThat(testTask.getName()).isEqualTo(UPDATED_NAME);
     }
 
     @Test
@@ -244,8 +236,6 @@ class TaskResourceIT {
         Task partialUpdatedTask = new Task();
         partialUpdatedTask.setId(task.getId());
 
-        partialUpdatedTask.name(UPDATED_NAME);
-
         restTaskMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedTask.getId())
@@ -258,7 +248,6 @@ class TaskResourceIT {
         List<Task> taskList = taskRepository.findAll();
         assertThat(taskList).hasSize(databaseSizeBeforeUpdate);
         Task testTask = taskList.get(taskList.size() - 1);
-        assertThat(testTask.getName()).isEqualTo(UPDATED_NAME);
     }
 
     @Test
@@ -273,8 +262,6 @@ class TaskResourceIT {
         Task partialUpdatedTask = new Task();
         partialUpdatedTask.setId(task.getId());
 
-        partialUpdatedTask.name(UPDATED_NAME);
-
         restTaskMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedTask.getId())
@@ -287,7 +274,6 @@ class TaskResourceIT {
         List<Task> taskList = taskRepository.findAll();
         assertThat(taskList).hasSize(databaseSizeBeforeUpdate);
         Task testTask = taskList.get(taskList.size() - 1);
-        assertThat(testTask.getName()).isEqualTo(UPDATED_NAME);
     }
 
     @Test

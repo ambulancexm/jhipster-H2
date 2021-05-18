@@ -3,12 +3,10 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
+import { finalize } from 'rxjs/operators';
 
 import { IMxCell, MxCell } from '../mx-cell.model';
 import { MxCellService } from '../service/mx-cell.service';
-import { ITask } from 'app/entities/task/task.model';
-import { TaskService } from 'app/entities/task/service/task.service';
 
 @Component({
   selector: 'jhi-mx-cell-update',
@@ -17,27 +15,17 @@ import { TaskService } from 'app/entities/task/service/task.service';
 export class MxCellUpdateComponent implements OnInit {
   isSaving = false;
 
-  tasksSharedCollection: ITask[] = [];
-
   editForm = this.fb.group({
     id: [],
     lg: [],
     style: [],
-    task: [],
   });
 
-  constructor(
-    protected mxCellService: MxCellService,
-    protected taskService: TaskService,
-    protected activatedRoute: ActivatedRoute,
-    protected fb: FormBuilder
-  ) {}
+  constructor(protected mxCellService: MxCellService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ mxCell }) => {
       this.updateForm(mxCell);
-
-      this.loadRelationshipsOptions();
     });
   }
 
@@ -53,10 +41,6 @@ export class MxCellUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.mxCellService.create(mxCell));
     }
-  }
-
-  trackTaskById(index: number, item: ITask): number {
-    return item.id!;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IMxCell>>): void {
@@ -83,18 +67,7 @@ export class MxCellUpdateComponent implements OnInit {
       id: mxCell.id,
       lg: mxCell.lg,
       style: mxCell.style,
-      task: mxCell.task,
     });
-
-    this.tasksSharedCollection = this.taskService.addTaskToCollectionIfMissing(this.tasksSharedCollection, mxCell.task);
-  }
-
-  protected loadRelationshipsOptions(): void {
-    this.taskService
-      .query()
-      .pipe(map((res: HttpResponse<ITask[]>) => res.body ?? []))
-      .pipe(map((tasks: ITask[]) => this.taskService.addTaskToCollectionIfMissing(tasks, this.editForm.get('task')!.value)))
-      .subscribe((tasks: ITask[]) => (this.tasksSharedCollection = tasks));
   }
 
   protected createFromForm(): IMxCell {
@@ -103,7 +76,6 @@ export class MxCellUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       lg: this.editForm.get(['lg'])!.value,
       style: this.editForm.get(['style'])!.value,
-      task: this.editForm.get(['task'])!.value,
     };
   }
 }

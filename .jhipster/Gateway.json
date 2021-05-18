@@ -1,7 +1,19 @@
 {
   "name": "Gateway",
-  "fields": [],
-  "relationships": [],
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "Long"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "mxCell",
+      "otherEntityRelationshipName": "gateway",
+      "relationshipName": "mxCell"
+    }
+  ],
   "entityTableName": "gateway",
   "dto": "no",
   "pagination": "no",
