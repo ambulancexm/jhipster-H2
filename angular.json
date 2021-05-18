@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "jhipster-h-2": {
+    "my-app": {
       "root": "",
       "sourceRoot": "src/main/webapp",
       "projectType": "application",
@@ -66,12 +66,12 @@
         "serve": {
           "builder": "@angular-builders/custom-webpack:dev-server",
           "options": {
-            "browserTarget": "jhipster-h-2:build",
+            "browserTarget": "my-app:build",
             "proxyConfig": "./webpack/proxy.conf.js"
           },
           "configurations": {
             "production": {
-              "browserTarget": "jhipster-h-2:build:production"
+              "browserTarget": "my-app:build:production"
             }
           }
         },
@@ -93,7 +93,7 @@
       "prefix": "jhi"
     }
   },
-  "defaultProject": "jhipster-h-2",
+  "defaultProject": "my-app",
   "cli": {
     "packageManager": "npm"
   }
