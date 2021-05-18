@@ -1,0 +1,36 @@
+
+application {
+  config {
+    baseName myApp,
+    applicationType monolith,
+    packageName com.myapp,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    clientFramework angular
+  }
+  entities *
+}
+
+entity MxCell {
+	id Long,
+    lg String,
+    style String,
+    
+}
+
+entity Task{
+	id Long,
+    name String
+}
+
+entity Event{}
+
+entity Gateway{}
+
+
+relationship OneToMany {
+   Task to MxCell,
+   
+  
+}
+    
