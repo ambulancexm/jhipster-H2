@@ -1,0 +1,15 @@
+{
+  "name": "Event",
+  "fields": [],
+  "relationships": [],
+  "entityTableName": "event",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "applications": ["myApp"],
+  "changelogDate": "20210518065351"
+}
